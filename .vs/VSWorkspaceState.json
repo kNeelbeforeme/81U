@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Example-Project",
     "\\Example-Project\\include",
     "\\Example-Project\\include\\EZ-Template",
     "\\Example-Project\\src"
   ],
-  "SelectedNode": "\\Example-Project\\src\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
