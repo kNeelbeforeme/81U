@@ -17,7 +17,6 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -53,27 +52,24 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared" >
+  <ImportGroup Label="Shared">
   </ImportGroup>
-    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    </ImportGroup>
-    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    </ImportGroup>
-    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    </ImportGroup>
-    <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    </ImportGroup>
-
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -130,8 +126,300 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-
-  <ItemGroup></ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="compile_commands.json" />
+    <None Include="Example-Project\.d\autons.cpp.d" />
+    <None Include="Example-Project\.d\main.cpp.d" />
+    <None Include="Example-Project\.gitignore" />
+    <None Include="Example-Project\bin\cold.package.bin" />
+    <None Include="Example-Project\bin\cold.package.elf" />
+    <None Include="Example-Project\bin\hot.package.bin" />
+    <None Include="Example-Project\bin\hot.package.elf" />
+    <None Include="Example-Project\common.mk" />
+    <None Include="Example-Project\compile_commands.json" />
+    <None Include="Example-Project\EZ-Template%402.1.2.zip" />
+    <None Include="Example-Project\firmware\v5-common.ld" />
+    <None Include="Example-Project\firmware\v5-hot.ld" />
+    <None Include="Example-Project\firmware\v5.ld" />
+    <None Include="Example-Project\Makefile" />
+    <None Include="Example-Project\project.pros" />
+    <None Include="Example-Project\README.md" />
+    <None Include="EZ-Template%402.1.2.zip" />
+    <None Include="Makefile" />
+    <None Include="project.pros" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Example-Project\src\autons.cpp" />
+    <ClCompile Include="Example-Project\src\main.cpp" />
+    <ClCompile Include="src\autons.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Example-Project\include\api.h" />
+    <ClInclude Include="Example-Project\include\autons.hpp" />
+    <ClInclude Include="Example-Project\include\display\lvgl.h" />
+    <ClInclude Include="Example-Project\include\display\lv_conf.h" />
+    <ClInclude Include="Example-Project\include\display\lv_conf_checker.h" />
+    <ClInclude Include="Example-Project\include\display\lv_core\lv_group.h" />
+    <ClInclude Include="Example-Project\include\display\lv_core\lv_indev.h" />
+    <ClInclude Include="Example-Project\include\display\lv_core\lv_lang.h" />
+    <ClInclude Include="Example-Project\include\display\lv_core\lv_obj.h" />
+    <ClInclude Include="Example-Project\include\display\lv_core\lv_refr.h" />
+    <ClInclude Include="Example-Project\include\display\lv_core\lv_style.h" />
+    <ClInclude Include="Example-Project\include\display\lv_core\lv_vdb.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_arc.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_img.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_label.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_line.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_rbasic.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_rect.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_triangle.h" />
+    <ClInclude Include="Example-Project\include\display\lv_draw\lv_draw_vbasic.h" />
+    <ClInclude Include="Example-Project\include\display\lv_fonts\lv_font_builtin.h" />
+    <ClInclude Include="Example-Project\include\display\lv_hal\lv_hal.h" />
+    <ClInclude Include="Example-Project\include\display\lv_hal\lv_hal_disp.h" />
+    <ClInclude Include="Example-Project\include\display\lv_hal\lv_hal_indev.h" />
+    <ClInclude Include="Example-Project\include\display\lv_hal\lv_hal_tick.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_anim.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_area.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_circ.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_color.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_font.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_fs.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_gc.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_ll.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_log.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_math.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_mem.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_symbol_def.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_task.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_templ.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_txt.h" />
+    <ClInclude Include="Example-Project\include\display\lv_misc\lv_ufs.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_arc.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_bar.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_btn.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_btnm.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_calendar.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_canvas.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_cb.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_chart.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_cont.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_ddlist.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_gauge.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_img.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_imgbtn.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_kb.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_label.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_led.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_line.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_list.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_lmeter.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_mbox.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_objx_templ.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_page.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_preload.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_roller.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_slider.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_spinbox.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_sw.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_ta.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_table.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_tabview.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_tileview.h" />
+    <ClInclude Include="Example-Project\include\display\lv_objx\lv_win.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_alien.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_default.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_material.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_mono.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_nemo.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_night.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_templ.h" />
+    <ClInclude Include="Example-Project\include\display\lv_themes\lv_theme_zen.h" />
+    <ClInclude Include="Example-Project\include\display\lv_version.h" />
+    <ClInclude Include="Example-Project\include\EZ-Template\api.hpp" />
+    <ClInclude Include="Example-Project\include\EZ-Template\auton.hpp" />
+    <ClInclude Include="Example-Project\include\EZ-Template\auton_selector.hpp" />
+    <ClInclude Include="Example-Project\include\EZ-Template\drive\drive.hpp" />
+    <ClInclude Include="Example-Project\include\EZ-Template\PID.hpp" />
+    <ClInclude Include="Example-Project\include\EZ-Template\sdcard.hpp" />
+    <ClInclude Include="Example-Project\include\EZ-Template\util.hpp" />
+    <ClInclude Include="Example-Project\include\main.h" />
+    <ClInclude Include="Example-Project\include\pros\adi.h" />
+    <ClInclude Include="Example-Project\include\pros\adi.hpp" />
+    <ClInclude Include="Example-Project\include\pros\apix.h" />
+    <ClInclude Include="Example-Project\include\pros\api_legacy.h" />
+    <ClInclude Include="Example-Project\include\pros\colors.h" />
+    <ClInclude Include="Example-Project\include\pros\colors.hpp" />
+    <ClInclude Include="Example-Project\include\pros\distance.h" />
+    <ClInclude Include="Example-Project\include\pros\distance.hpp" />
+    <ClInclude Include="Example-Project\include\pros\error.h" />
+    <ClInclude Include="Example-Project\include\pros\ext_adi.h" />
+    <ClInclude Include="Example-Project\include\pros\gps.h" />
+    <ClInclude Include="Example-Project\include\pros\gps.hpp" />
+    <ClInclude Include="Example-Project\include\pros\imu.h" />
+    <ClInclude Include="Example-Project\include\pros\imu.hpp" />
+    <ClInclude Include="Example-Project\include\pros\link.h" />
+    <ClInclude Include="Example-Project\include\pros\link.hpp" />
+    <ClInclude Include="Example-Project\include\pros\llemu.h" />
+    <ClInclude Include="Example-Project\include\pros\llemu.hpp" />
+    <ClInclude Include="Example-Project\include\pros\misc.h" />
+    <ClInclude Include="Example-Project\include\pros\misc.hpp" />
+    <ClInclude Include="Example-Project\include\pros\motors.h" />
+    <ClInclude Include="Example-Project\include\pros\motors.hpp" />
+    <ClInclude Include="Example-Project\include\pros\optical.h" />
+    <ClInclude Include="Example-Project\include\pros\optical.hpp" />
+    <ClInclude Include="Example-Project\include\pros\rotation.h" />
+    <ClInclude Include="Example-Project\include\pros\rotation.hpp" />
+    <ClInclude Include="Example-Project\include\pros\rtos.h" />
+    <ClInclude Include="Example-Project\include\pros\rtos.hpp" />
+    <ClInclude Include="Example-Project\include\pros\screen.h" />
+    <ClInclude Include="Example-Project\include\pros\screen.hpp" />
+    <ClInclude Include="Example-Project\include\pros\serial.h" />
+    <ClInclude Include="Example-Project\include\pros\serial.hpp" />
+    <ClInclude Include="Example-Project\include\pros\vision.h" />
+    <ClInclude Include="Example-Project\include\pros\vision.hpp" />
+    <ClInclude Include="include\api.h" />
+    <ClInclude Include="include\autons.hpp" />
+    <ClInclude Include="include\display\lvgl.h" />
+    <ClInclude Include="include\display\lv_conf.h" />
+    <ClInclude Include="include\display\lv_conf_checker.h" />
+    <ClInclude Include="include\display\lv_core\lv_group.h" />
+    <ClInclude Include="include\display\lv_core\lv_indev.h" />
+    <ClInclude Include="include\display\lv_core\lv_lang.h" />
+    <ClInclude Include="include\display\lv_core\lv_obj.h" />
+    <ClInclude Include="include\display\lv_core\lv_refr.h" />
+    <ClInclude Include="include\display\lv_core\lv_style.h" />
+    <ClInclude Include="include\display\lv_core\lv_vdb.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_arc.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_img.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_label.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_line.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_rbasic.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_rect.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_triangle.h" />
+    <ClInclude Include="include\display\lv_draw\lv_draw_vbasic.h" />
+    <ClInclude Include="include\display\lv_fonts\lv_font_builtin.h" />
+    <ClInclude Include="include\display\lv_hal\lv_hal.h" />
+    <ClInclude Include="include\display\lv_hal\lv_hal_disp.h" />
+    <ClInclude Include="include\display\lv_hal\lv_hal_indev.h" />
+    <ClInclude Include="include\display\lv_hal\lv_hal_tick.h" />
+    <ClInclude Include="include\display\lv_misc\lv_anim.h" />
+    <ClInclude Include="include\display\lv_misc\lv_area.h" />
+    <ClInclude Include="include\display\lv_misc\lv_circ.h" />
+    <ClInclude Include="include\display\lv_misc\lv_color.h" />
+    <ClInclude Include="include\display\lv_misc\lv_font.h" />
+    <ClInclude Include="include\display\lv_misc\lv_fs.h" />
+    <ClInclude Include="include\display\lv_misc\lv_gc.h" />
+    <ClInclude Include="include\display\lv_misc\lv_ll.h" />
+    <ClInclude Include="include\display\lv_misc\lv_log.h" />
+    <ClInclude Include="include\display\lv_misc\lv_math.h" />
+    <ClInclude Include="include\display\lv_misc\lv_mem.h" />
+    <ClInclude Include="include\display\lv_misc\lv_symbol_def.h" />
+    <ClInclude Include="include\display\lv_misc\lv_task.h" />
+    <ClInclude Include="include\display\lv_misc\lv_templ.h" />
+    <ClInclude Include="include\display\lv_misc\lv_txt.h" />
+    <ClInclude Include="include\display\lv_misc\lv_ufs.h" />
+    <ClInclude Include="include\display\lv_objx\lv_arc.h" />
+    <ClInclude Include="include\display\lv_objx\lv_bar.h" />
+    <ClInclude Include="include\display\lv_objx\lv_btn.h" />
+    <ClInclude Include="include\display\lv_objx\lv_btnm.h" />
+    <ClInclude Include="include\display\lv_objx\lv_calendar.h" />
+    <ClInclude Include="include\display\lv_objx\lv_canvas.h" />
+    <ClInclude Include="include\display\lv_objx\lv_cb.h" />
+    <ClInclude Include="include\display\lv_objx\lv_chart.h" />
+    <ClInclude Include="include\display\lv_objx\lv_cont.h" />
+    <ClInclude Include="include\display\lv_objx\lv_ddlist.h" />
+    <ClInclude Include="include\display\lv_objx\lv_gauge.h" />
+    <ClInclude Include="include\display\lv_objx\lv_img.h" />
+    <ClInclude Include="include\display\lv_objx\lv_imgbtn.h" />
+    <ClInclude Include="include\display\lv_objx\lv_kb.h" />
+    <ClInclude Include="include\display\lv_objx\lv_label.h" />
+    <ClInclude Include="include\display\lv_objx\lv_led.h" />
+    <ClInclude Include="include\display\lv_objx\lv_line.h" />
+    <ClInclude Include="include\display\lv_objx\lv_list.h" />
+    <ClInclude Include="include\display\lv_objx\lv_lmeter.h" />
+    <ClInclude Include="include\display\lv_objx\lv_mbox.h" />
+    <ClInclude Include="include\display\lv_objx\lv_objx_templ.h" />
+    <ClInclude Include="include\display\lv_objx\lv_page.h" />
+    <ClInclude Include="include\display\lv_objx\lv_preload.h" />
+    <ClInclude Include="include\display\lv_objx\lv_roller.h" />
+    <ClInclude Include="include\display\lv_objx\lv_slider.h" />
+    <ClInclude Include="include\display\lv_objx\lv_spinbox.h" />
+    <ClInclude Include="include\display\lv_objx\lv_sw.h" />
+    <ClInclude Include="include\display\lv_objx\lv_ta.h" />
+    <ClInclude Include="include\display\lv_objx\lv_table.h" />
+    <ClInclude Include="include\display\lv_objx\lv_tabview.h" />
+    <ClInclude Include="include\display\lv_objx\lv_tileview.h" />
+    <ClInclude Include="include\display\lv_objx\lv_win.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_alien.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_default.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_material.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_mono.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_nemo.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_night.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_templ.h" />
+    <ClInclude Include="include\display\lv_themes\lv_theme_zen.h" />
+    <ClInclude Include="include\display\lv_version.h" />
+    <ClInclude Include="include\EZ-Template\api.hpp" />
+    <ClInclude Include="include\EZ-Template\auton.hpp" />
+    <ClInclude Include="include\EZ-Template\auton_selector.hpp" />
+    <ClInclude Include="include\EZ-Template\drive\drive.hpp" />
+    <ClInclude Include="include\EZ-Template\PID.hpp" />
+    <ClInclude Include="include\EZ-Template\sdcard.hpp" />
+    <ClInclude Include="include\EZ-Template\util.hpp" />
+    <ClInclude Include="include\main.h" />
+    <ClInclude Include="include\pros\adi.h" />
+    <ClInclude Include="include\pros\adi.hpp" />
+    <ClInclude Include="include\pros\apix.h" />
+    <ClInclude Include="include\pros\api_legacy.h" />
+    <ClInclude Include="include\pros\colors.h" />
+    <ClInclude Include="include\pros\colors.hpp" />
+    <ClInclude Include="include\pros\distance.h" />
+    <ClInclude Include="include\pros\distance.hpp" />
+    <ClInclude Include="include\pros\error.h" />
+    <ClInclude Include="include\pros\ext_adi.h" />
+    <ClInclude Include="include\pros\gps.h" />
+    <ClInclude Include="include\pros\gps.hpp" />
+    <ClInclude Include="include\pros\imu.h" />
+    <ClInclude Include="include\pros\imu.hpp" />
+    <ClInclude Include="include\pros\link.h" />
+    <ClInclude Include="include\pros\link.hpp" />
+    <ClInclude Include="include\pros\llemu.h" />
+    <ClInclude Include="include\pros\llemu.hpp" />
+    <ClInclude Include="include\pros\misc.h" />
+    <ClInclude Include="include\pros\misc.hpp" />
+    <ClInclude Include="include\pros\motors.h" />
+    <ClInclude Include="include\pros\motors.hpp" />
+    <ClInclude Include="include\pros\optical.h" />
+    <ClInclude Include="include\pros\optical.hpp" />
+    <ClInclude Include="include\pros\rotation.h" />
+    <ClInclude Include="include\pros\rotation.hpp" />
+    <ClInclude Include="include\pros\rtos.h" />
+    <ClInclude Include="include\pros\rtos.hpp" />
+    <ClInclude Include="include\pros\screen.h" />
+    <ClInclude Include="include\pros\screen.hpp" />
+    <ClInclude Include="include\pros\serial.h" />
+    <ClInclude Include="include\pros\serial.hpp" />
+    <ClInclude Include="include\pros\vision.h" />
+    <ClInclude Include="include\pros\vision.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Example-Project\firmware\EZ-Template.a" />
+    <Library Include="Example-Project\firmware\libc.a" />
+    <Library Include="Example-Project\firmware\libm.a" />
+    <Library Include="Example-Project\firmware\libpros.a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Example-Project\bin\autons.cpp.o" />
+    <Object Include="Example-Project\bin\main.cpp.o" />
+    <Object Include="Example-Project\bin\_pros_ld_timestamp.o" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
