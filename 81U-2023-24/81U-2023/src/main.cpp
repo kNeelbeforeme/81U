@@ -101,7 +101,7 @@ void initialize() {
   chassis.initialize();
   ez::as::initialize();
   pros::lcd::register_btn1_cb(toggle_skills);
-  ez::print_to_screen("Skills is " + is_skills, 4)
+  ez::print_to_screen("Skills is " + is_skills, 4);
 }
 
 
