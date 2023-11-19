@@ -6,16 +6,22 @@
 // https://ez-robotics.github.io/EZ-Template/
 /////
 
-
+//PORTS 2,3,4 ARE BAD
+ 
+//motor initialization
+pros::Motor cata(11);
+pros::Motor intake(20);
+pros::ADIDigitalOut right_wing('A', false);
+pros::ADIDigitalOut left_wing('B', false);
 // Chassis constructor
 Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  {-3, -5, -1}
+    {-5, -13, -1}
 
   // Right Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  ,{8, 6, 10}
+  ,{6, 8, 10}
 
   // IMU Port
   ,19
@@ -32,7 +38,7 @@ Drive chassis (
   //    (or gear ratio of tracking wheel)
   // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
   // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
-  ,2.333
+  ,1.75
 
   // Uncomment if using tracking wheels
   /*
@@ -50,6 +56,10 @@ Drive chassis (
   // ,1
 );
 
+bool is_skills = false;
+void toggle_skills() {
+    is_skills != is_skills;
+}
 
 
 /**
@@ -71,6 +81,7 @@ void initialize() {
   default_constants(); // Set the drive to your own constants from autons.cpp!
   exit_condition_defaults(); // Set the exit conditions to your own constants from autons.cpp!
 
+
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
   // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
@@ -89,6 +100,8 @@ void initialize() {
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
+  pros::lcd::register_btn1_cb(toggle_skills);
+  ez::print_to_screen("Skills is " + is_skills, 4)
 }
 
 
@@ -157,19 +170,52 @@ void autonomous() {
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
+  if (is_skills) {
 
-  while (true) {
+      while (true) {
 
-    //chassis.tank(); // Tank control
-    chassis.arcade_standard(ez::SPLIT); // Standard split arcade
-    // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
-    // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
-    // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+          //chassis.tank(); // Tank control
+          // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
+          chassis.arcade_standard(ez::SINGLE); // Standard single arcade
+          // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
+          // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 
-    // . . .
-    // Put more user control code here!
-    // . . .
+          //if left far trigger pressed, move intake inward, and vice versa
+          if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+              intake.move(127);
+          }
+          else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+              intake.move(-127);
+          }
+          else {
+              intake.brake();
+          }
 
-    pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+
+          pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+      }
+  }  else if (!is_skills) {
+
+      while (true) {
+
+          //chassis.tank(); // Tank control
+          chassis.arcade_standard(ez::SPLIT); // Standard split arcade
+          // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
+          // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
+          // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+
+          //if right far trigger pressed, move intake inward, and vice versa
+          if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+              intake.move(127);
+          }
+          else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+              intake.move(-127);
+          }
+          else {
+              intake.brake();
+          }
+
+          pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+      }
   }
 }
