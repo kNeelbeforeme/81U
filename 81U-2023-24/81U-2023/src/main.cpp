@@ -1,4 +1,5 @@
 #include "../include/main.h"
+#include <string>
 
 
 /////
@@ -7,12 +8,7 @@
 /////
 
 //PORTS 2,3,4 ARE BAD
- 
-//motor initialization
-pros::Motor cata(11);
-pros::Motor intake(20);
-pros::ADIDigitalOut right_wing('A', false);
-pros::ADIDigitalOut left_wing('B', false);
+
 // Chassis constructor
 Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
@@ -56,7 +52,7 @@ Drive chassis (
   // ,1
 );
 
-bool is_skills = false;
+bool is_skills = true;
 void toggle_skills() {
     is_skills != is_skills;
 }
@@ -68,6 +64,7 @@ void toggle_skills() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
 void initialize() {
   // Print our branding over your terminal :D
   ez::print_ez_template();
@@ -75,7 +72,7 @@ void initialize() {
   pros::delay(500); // Stop the user from doing anything while legacy ports configure.
 
   // Configure your chassis controls
-  chassis.toggle_modify_curve_with_controller(true); // Enables modifying the controller curve with buttons on the joysticks
+  chassis.toggle_modify_curve_with_controller(false); // Enables modifying the controller curve with buttons on the joysticks
   chassis.set_active_brake(0); // Sets the active brake kP. We recommend 0.1.
   chassis.set_curve_default(1, 1); // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)  
   default_constants(); // Set the drive to your own constants from autons.cpp!
@@ -86,13 +83,14 @@ void initialize() {
   // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
 
+  cata.tare_position();
+  cata.set_encoder_units(MOTOR_ENCODER_DEGREES);
+
+
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-    Auton("Example Drive\n\nDrive forward and come back.", drive_example),
-    Auton("Example Turn\n\nTurn 3 times.", turn_example),
-    Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
-    Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
-    Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
+    Auton("Right side code\nThis code goes forward, does some swerves, and scores a preload", right_side),
+    Auton("Left side code\nThis code goes forward, does some swerves, and scores a preload", left_side),
     Auton("Combine all 3 movements", combining_movements),
     Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
   });
@@ -101,7 +99,7 @@ void initialize() {
   chassis.initialize();
   ez::as::initialize();
   pros::lcd::register_btn1_cb(toggle_skills);
-  ez::print_to_screen("Skills is " + is_skills, 4);
+  ez::print_to_screen("Skills is " + std::to_string(is_skills), 4);
 }
 
 
@@ -167,40 +165,45 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+void wings(bool out) {
+    if (out) {
+        left_wing.set_value(true);
+        right_wing.set_value(true);
+    }
+    else {
+        left_wing.set_value(false);
+        right_wing.set_value(false);
+    }
+}
+void catamove() {
+    while (true) {
+        //if far left trigger, move cata down
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+            cata.move_relative(365,80);
+            pros::delay(100);
+        }
+        pros::delay(ez::util::DELAY_TIME);
+        std::cout << "cata pos is " << cata.get_position() << "\n";
+    }
+}
+
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-  if (is_skills) {
+  cata.set_brake_mode(MOTOR_BRAKE_HOLD);
+  bool wings_out = false;
+  wings(wings_out);
 
+  pros::Task cata_func(catamove, "moves cata to initial point when 'L2' is pressed");
+
+  if (is_skills) {
+      //Sunai Driving
       while (true) {
 
           //chassis.tank(); // Tank control
           // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
           chassis.arcade_standard(ez::SINGLE); // Standard single arcade
-          // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
-          // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
-
-          //if left far trigger pressed, move intake inward, and vice versa
-          if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-              intake.move(127);
-          }
-          else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-              intake.move(-127);
-          }
-          else {
-              intake.brake();
-          }
-
-
-          pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
-      }
-  }  else if (!is_skills) {
-
-      while (true) {
-
-          //chassis.tank(); // Tank control
-          chassis.arcade_standard(ez::SPLIT); // Standard split arcade
-          // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
           // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
           // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 
@@ -213,6 +216,54 @@ void opcontrol() {
           }
           else {
               intake.brake();
+          }
+
+
+
+
+          //if "A" pressed, toggle wings
+          if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+              wings_out != wings_out;
+              master.print(1, 1, "wings_out");
+              wings(wings_out);
+          }
+
+
+          pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+      }
+  }  else if (!is_skills) {
+      //Arjun Driving
+      while (true) {
+
+          //chassis.tank(); // Tank control
+          chassis.arcade_standard(ez::SPLIT); // Standard split arcade
+          // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
+          // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
+          // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+          
+          //if left far trigger pressed, move intake inward, and vice versa
+          if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+              intake.move(127);
+          }
+          else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+              intake.move(-127);
+          }
+          else {
+              intake.brake();
+          }
+
+          ////if far right trigger, move cata down.
+          //if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+          //    cata.move(120);
+          //}
+          //else {
+          //    cata.brake();
+          //}
+
+          //if "A" pressed, toggle wings
+          if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+              wings_out != wings_out;
+              wings(wings_out);
           }
 
           pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME

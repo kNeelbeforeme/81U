@@ -25,8 +25,8 @@ const int SWING_SPEED = 90;
 // If the objects are light or the cog doesn't change much, then there isn't a concern here.
 
 void default_constants() {
-  chassis.set_slew_min_power(80, 80);
-  chassis.set_slew_distance(7, 7);
+  chassis.set_slew_min_power(70, 80);
+  chassis.set_slew_distance(5, 5);
   chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
@@ -67,6 +67,50 @@ void modified_exit_condition() {
 }
 
 
+///
+// Right Side Auton
+///
+void right_side() {
+    chassis.set_drive_pid(48, DRIVE_SPEED, true);
+    chassis.wait_drive();
+
+    chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
+    chassis.wait_drive();
+
+    chassis.set_drive_pid(12, DRIVE_SPEED);
+    chassis.wait_drive();
+
+    chassis.set_swing_pid(ez::LEFT_SWING, 135, SWING_SPEED);
+    chassis.wait_drive();
+
+    intake.move(-127);
+
+    chassis.set_drive_pid(12, DRIVE_SPEED);
+    chassis.wait_drive();
+}
+
+
+///
+// Left Side Auton
+///
+void left_side() {
+    chassis.set_drive_pid(48, DRIVE_SPEED, true);
+    chassis.wait_drive();
+
+    chassis.set_swing_pid(ez::RIGHT_SWING, 45, SWING_SPEED);
+    chassis.wait_drive();
+
+    chassis.set_drive_pid(12, DRIVE_SPEED);
+    chassis.wait_drive();
+
+    chassis.set_swing_pid(ez::LEFT_SWING, -135, SWING_SPEED);
+    chassis.wait_drive();
+
+    intake.move(-127);
+
+    chassis.set_drive_pid(12, DRIVE_SPEED);
+    chassis.wait_drive();
+}
 
 ///
 // Drive Example

@@ -152,7 +152,9 @@
   <ItemGroup>
     <ClCompile Include="Example-Project\src\autons.cpp" />
     <ClCompile Include="Example-Project\src\main.cpp" />
+    <ClCompile Include="include\devices.h" />
     <ClCompile Include="src\autons.cpp" />
+    <ClCompile Include="src\devices.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

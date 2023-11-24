@@ -48,6 +48,7 @@
 // More includes here...
 //
 // . . .
+#include "devices.h"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
@@ -60,6 +61,7 @@
 // using namespace pros;
 // using namespace pros::literals;
 // using namespace okapi;
+
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure
@@ -78,11 +80,14 @@ void opcontrol(void);
 }
 #endif
 
+
 #ifdef __cplusplus
 /**
  * You can add C++-only headers here
  */
 //#include <iostream>
 #endif
+
+
 
 #endif  // _PROS_MAIN_H_
