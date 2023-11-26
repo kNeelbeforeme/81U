@@ -152,10 +152,11 @@
   <ItemGroup>
     <ClCompile Include="Example-Project\src\autons.cpp" />
     <ClCompile Include="Example-Project\src\main.cpp" />
-    <ClCompile Include="include\devices.h" />
+    <ClCompile Include="include\organiz\devices.h" />
     <ClCompile Include="src\autons.cpp" />
-    <ClCompile Include="src\devices.cpp" />
+    <ClCompile Include="src\organiz\devices.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\organiz\opcontrol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example-Project\include\api.h" />
@@ -376,6 +377,8 @@
     <ClInclude Include="include\EZ-Template\sdcard.hpp" />
     <ClInclude Include="include\EZ-Template\util.hpp" />
     <ClInclude Include="include\main.h" />
+    <ClInclude Include="include\organiz\opcontrol.h" />
+    <ClInclude Include="include\organiz.h" />
     <ClInclude Include="include\pros\adi.h" />
     <ClInclude Include="include\pros\adi.hpp" />
     <ClInclude Include="include\pros\apix.h" />

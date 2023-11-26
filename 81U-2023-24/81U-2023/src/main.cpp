@@ -9,52 +9,11 @@
 
 //PORTS 2,3,4 ARE BAD
 
-// Chassis constructor
-Drive chassis (
-  // Left Chassis Ports (negative port will reverse it!)
-  //   the first port is the sensored port (when trackers are not used!)
-    {-5, -13, -1}
 
-  // Right Chassis Ports (negative port will reverse it!)
-  //   the first port is the sensored port (when trackers are not used!)
-  ,{6, 8, 10}
-
-  // IMU Port
-  ,19
-
-  // Wheel Diameter (Remember, 4" wheels are actually 4.125!)pros
-  //    (or tracking wheel diameter)
-  ,4.125
-
-  // Cartridge RPM
-  //   (or tick per rotation if using tracking wheels)
-  ,600
-
-  // External Gear Ratio (MUST BE DECIMAL)
-  //    (or gear ratio of tracking wheel)
-  // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
-  // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
-  ,1.75
-
-  // Uncomment if using tracking wheels
-  /*
-  // Left Tracking Wheel Ports (negative port will reverse it!)
-  // ,{1, 2} // 3 wire encoder
-  // ,8 // Rotation sensor
-
-  // Right Tracking Wheel Ports (negative port will reverse it!)
-  // ,{-3, -4} // 3 wire encoder
-  // ,-9 // Rotation sensor
-  */
-
-  // Uncomment if tracking wheels are plugged into a 3 wire expander
-  // 3 Wire Port Expander Smart Port
-  // ,1
-);
 
 bool is_skills = true;
 void toggle_skills() {
-    is_skills != is_skills;
+	is_skills != is_skills;
 }
 
 
@@ -83,21 +42,21 @@ void initialize() {
   // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
 
-  cata.tare_position();
-  cata.set_encoder_units(MOTOR_ENCODER_DEGREES);
+  flywheel.tare_position();
+  flywheel.set_encoder_units(MOTOR_ENCODER_DEGREES);
 
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-    Auton("Right side code\nThis code goes forward, does some swerves, and scores a preload", right_side),
-    Auton("Left side code\nThis code goes forward, does some swerves, and scores a preload", left_side),
-    Auton("Combine all 3 movements", combining_movements),
-    Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
+	Auton("Right side code\nThis code goes forward, does some swerves, and scores a preload", right_side),
+	Auton("Left side code\nThis code goes forward, does some swerves, and scores a preload", left_side),
+	Auton("Combine all 3 movements", combining_movements),
+	Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
   });
 
   // Initialize chassis and auton selector
   chassis.initialize();
-  ez::as::initialize();
+  //ez::as::initialize();
   pros::lcd::register_btn1_cb(toggle_skills);
   ez::print_to_screen("Skills is " + std::to_string(is_skills), 4);
 }
@@ -147,7 +106,34 @@ void autonomous() {
   chassis.reset_drive_sensor(); // Reset drive sensors to 0
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-  ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+  //ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+
+ /* chassis.set_drive_pid(48, 110, true);
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::RIGHT_SWING, -45, 90);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(12, 110);
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::LEFT_SWING, 135, 90);
+  chassis.wait_drive();
+
+  intake.move(-127);
+
+  chassis.set_drive_pid(12, 110);
+  chassis.wait_drive();*/
+
+  chassis.set_drive_pid(24, 110, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-12, 110);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-12, 110);
+  chassis.wait_drive();
+  ez::as::shutdown();
 }
 
 
@@ -166,107 +152,95 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 
-void wings(bool out) {
-    if (out) {
-        left_wing.set_value(true);
-        right_wing.set_value(true);
-    }
-    else {
-        left_wing.set_value(false);
-        right_wing.set_value(false);
-    }
-}
-void catamove() {
-    while (true) {
-        //if far left trigger, move cata down
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-            cata.move_relative(365,80);
-            pros::delay(100);
-        }
-        pros::delay(ez::util::DELAY_TIME);
-        std::cout << "cata pos is " << cata.get_position() << "\n";
-    }
-}
+
 
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-  cata.set_brake_mode(MOTOR_BRAKE_HOLD);
+  flywheel.set_brake_mode(MOTOR_BRAKE_COAST);
   bool wings_out = false;
   wings(wings_out);
 
-  pros::Task cata_func(catamove, "moves cata to initial point when 'L2' is pressed");
+  pros::Task flywheel_func(flywheelmove, "moves flywheel to initial point when 'L2' is pressed");
 
   if (is_skills) {
-      //Sunai Driving
-      while (true) {
+	  //Sunai Driving
+	  while (true) {
 
-          //chassis.tank(); // Tank control
-          // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
-          chassis.arcade_standard(ez::SINGLE); // Standard single arcade
-          // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
-          // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+		  //chassis.tank(); // Tank control
+		  // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
+		  chassis.arcade_standard(ez::SINGLE); // Standard single arcade
+		  // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
+		  // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 
-          //if right far trigger pressed, move intake inward, and vice versa
-          if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-              intake.move(127);
-          }
-          else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-              intake.move(-127);
-          }
-          else {
-              intake.brake();
-          }
+		  //if right far trigger pressed, move intake inward, and vice versa
+		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+			  intake.move(127);
+		  }
+		  else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+			  intake.move(-127);
+		  }
+		  else {
+			  intake.brake();
+		  }
 
-
-
-
-          //if "A" pressed, toggle wings
-          if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-              wings_out != wings_out;
-              master.print(1, 1, "wings_out");
-              wings(wings_out);
-          }
+		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+			  flywheelmove();
+		  }
+		  else {
+			  flywheel.brake();
+		  }
 
 
-          pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
-      }
+
+
+		  //if "A" pressed, toggle wings
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+			  wings_out != wings_out;
+			  master.print(1, 1, "wings_out");
+			  wings(wings_out);
+		  }
+
+
+		  pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+	  }
   }  else if (!is_skills) {
-      //Arjun Driving
-      while (true) {
+	  //Arjun Driving
+	  while (true) {
 
-          //chassis.tank(); // Tank control
-          chassis.arcade_standard(ez::SPLIT); // Standard split arcade
-          // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
-          // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
-          // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
-          
-          //if left far trigger pressed, move intake inward, and vice versa
-          if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-              intake.move(127);
-          }
-          else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-              intake.move(-127);
-          }
-          else {
-              intake.brake();
-          }
+		  //chassis.tank(); // Tank control
+		  chassis.arcade_standard(ez::SPLIT); // Standard split arcade
+		  // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
+		  // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
+		  // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+		  
+		  //if left far trigger pressed, move intake inward, and vice versa
+		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+			  intake.move(127);
+		  }
+		  else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+			  intake.move(-127);
+		  }
+		  else {
+			  intake.brake();
+		  }
 
-          ////if far right trigger, move cata down.
-          //if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-          //    cata.move(120);
-          //}
-          //else {
-          //    cata.brake();
-          //}
 
-          //if "A" pressed, toggle wings
-          if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-              wings_out != wings_out;
-              wings(wings_out);
-          }
+		  ////if far right trigger, move flywheel down.
+		  //if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+		  //    flywheel.move(120);
+		  //}
+		  //else {
+		  //    flywheel.brake();
+		  //}
 
-          pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
-      }
+		  //if "A" pressed, toggle wings
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+			  wings_out != wings_out;
+			  wings(wings_out);
+		  }
+
+		  pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+	  }
   }
 }

@@ -54,10 +54,13 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\devices.h">
+    <ClCompile Include="include\organiz\devices.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\devices.cpp">
+    <ClCompile Include="src\organiz\devices.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\organiz\opcontrol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -816,6 +819,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\organiz\opcontrol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\organiz.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
