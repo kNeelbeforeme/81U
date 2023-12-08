@@ -1,21 +1,24 @@
 #include "../../include/organiz/devices.h"
 
+//PORTS 2,3,4 ARE BAD
+
 
 //motor initialization
 pros::Motor flywheel (11);
-pros::Motor intake(20);
+pros::Motor intake(12);
 pros::ADIDigitalOut right_wing('A', false);
 pros::ADIDigitalOut left_wing('B', false);
+pros::IMU inertial(20);
 
 // Chassis constructor
 Drive chassis(
 	// Left Chassis Ports (negative port will reverse it!)
 	//   the first port is the sensored port (when trackers are not used!)
-	{ -5, -13, -1 }
+	{ -10, -9, -8 }
 
 	// Right Chassis Ports (negative port will reverse it!)
 	//   the first port is the sensored port (when trackers are not used!)
-	, { 6, 8, 10 }
+	, { 1, 2, 3 }
 
 	// IMU Port
 	, 19

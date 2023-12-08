@@ -7,13 +7,19 @@
 // https://ez-robotics.github.io/EZ-Template/
 /////
 
-//PORTS 2,3,4 ARE BAD
 
 
 
-bool is_skills = true;
-void toggle_skills() {
+static bool is_skills = false;
+static void toggle_skills() {
 	is_skills != is_skills;
+	if (is_skills) {
+		pros::lcd::set_text(4, "Sunai");
+	}
+	else {
+		pros::lcd::set_text(4, "Arjun");
+	}
+
 }
 
 
@@ -23,6 +29,8 @@ void toggle_skills() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
+
 
 void initialize() {
   // Print our branding over your terminal :D
@@ -45,19 +53,24 @@ void initialize() {
   flywheel.tare_position();
   flywheel.set_encoder_units(MOTOR_ENCODER_DEGREES);
 
+  chassis.imu_calibrate();
+
+  pros::lcd::register_btn1_cb(toggle_skills);
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-	Auton("Right side code\nThis code goes forward, does some swerves, and scores a preload", right_side),
-	Auton("Left side code\nThis code goes forward, does some swerves, and scores a preload", left_side),
-	Auton("Combine all 3 movements", combining_movements),
+	Auton("Left side code\nThis code goes forward, does some swerves, and scores a preload LEFT", left_side),
+	Auton("Right side code\nThis code goes forward, does some swerves, and scores a preload on RIGHT", right_side),
+	Auton("Skills code: goes into position and turns flywheel", skills_code),
+	Auton("Test code__Test code__Test code__Test code", test_code),
+	Auton("Forward and backward", drive_example),
 	Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
   });
 
   // Initialize chassis and auton selector
   chassis.initialize();
-  //ez::as::initialize();
-  pros::lcd::register_btn1_cb(toggle_skills);
+  ez::as::initialize();
+
   ez::print_to_screen("Skills is " + std::to_string(is_skills), 4);
 }
 
@@ -69,7 +82,7 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {
-  // . . .
+
 }
 
 
@@ -106,33 +119,10 @@ void autonomous() {
   chassis.reset_drive_sensor(); // Reset drive sensors to 0
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-  //ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+  ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 
- /* chassis.set_drive_pid(48, 110, true);
-  chassis.wait_drive();
 
-  chassis.set_swing_pid(ez::RIGHT_SWING, -45, 90);
-  chassis.wait_drive();
 
-  chassis.set_drive_pid(12, 110);
-  chassis.wait_drive();
-
-  chassis.set_swing_pid(ez::LEFT_SWING, 135, 90);
-  chassis.wait_drive();
-
-  intake.move(-127);
-
-  chassis.set_drive_pid(12, 110);
-  chassis.wait_drive();*/
-
-  chassis.set_drive_pid(24, 110, true);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(-12, 110);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(-12, 110);
-  chassis.wait_drive();
   ez::as::shutdown();
 }
 
@@ -196,9 +186,9 @@ void opcontrol() {
 
 		  //if "A" pressed, toggle wings
 		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-			  wings_out != wings_out;
-			  master.print(1, 1, "wings_out");
-			  wings(wings_out);
+			  wings(true);
+		  } else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+			  wings(false);
 		  }
 
 
@@ -215,30 +205,33 @@ void opcontrol() {
 		  // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 		  
 		  //if left far trigger pressed, move intake inward, and vice versa
-		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
 			  intake.move(127);
 		  }
-		  else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+		  else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 			  intake.move(-127);
 		  }
 		  else {
 			  intake.brake();
 		  }
 
+		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+			  flywheelmove();
+		  }
+		  else {
+			  flywheel.brake();
+		  }
 
-		  ////if far right trigger, move flywheel down.
-		  //if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-		  //    flywheel.move(120);
-		  //}
-		  //else {
-		  //    flywheel.brake();
-		  //}
+
 
 		  //if "A" pressed, toggle wings
 		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-			  wings_out != wings_out;
-			  wings(wings_out);
+			  wings(true);
 		  }
+		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+			  wings(false);
+		  }
+
 
 		  pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
 	  }

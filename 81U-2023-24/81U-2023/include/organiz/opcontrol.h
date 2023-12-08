@@ -3,3 +3,4 @@
 
 void wings(bool out);
 void flywheelmove();
+void flywheelmoveauton(int speed);

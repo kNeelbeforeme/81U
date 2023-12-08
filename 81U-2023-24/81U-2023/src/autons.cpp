@@ -8,9 +8,9 @@
 
 
 const int DRIVE_SPEED = 110; // This is 110 / 127 (around 87 % of max speed).We don't suggest making this 127.
-                             // If this is 127 and the robot tries to heading correct, it's only correcting by
-                             // making one side slower.  When this is 87%, it's correcting by making one side
-                             //faster and one side slower, giving better heading correction. 
+							 // If this is 127 and the robot tries to heading correct, it's only correcting by
+							 // making one side slower.  When this is 87%, it's correcting by making one side
+							 //faster and one side slower, giving better heading correction. 
 
 const int TURN_SPEED  = 90;
 const int SWING_SPEED = 90;
@@ -27,21 +27,21 @@ const int SWING_SPEED = 90;
 void default_constants() {
   chassis.set_slew_min_power(70, 80);
   chassis.set_slew_distance(5, 5);
-  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 1000, 1, 0, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 1000, 1, 0, 0);
-  chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
+  chassis.set_pid_constants(&chassis.headingPID, 6, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.6, 0, 3, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.6, 0, 3, 0);
+  chassis.set_pid_constants(&chassis.turnPID, 5, 0.002, 38, 15);
   chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
 
 void jerk_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 13, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 5, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 5, 0, 5, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.swingPID, 10, 0, 45, 0);
 }
 
 void two_mogo_constants() {
@@ -66,27 +66,58 @@ void modified_exit_condition() {
   chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
 }
 
+///
+// Auto that tests everything
+///
+void test_code() {
 
+	chassis.set_turn_pid(90, TURN_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(-90, TURN_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(0, TURN_SPEED);
+	chassis.wait_drive();
+
+}
 ///
 // Right Side Auton
 ///
 void right_side() {
-    chassis.set_drive_pid(48, DRIVE_SPEED, true);
-    chassis.wait_drive();
+	default_constants();
+	chassis.set_drive_pid(24, DRIVE_SPEED, true);
+	chassis.wait_drive();
 
-    chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
-    chassis.wait_drive();
+	chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
+	chassis.wait_drive();
 
-    chassis.set_drive_pid(12, DRIVE_SPEED);
-    chassis.wait_drive();
+	chassis.set_drive_pid(12, DRIVE_SPEED, true);
+	chassis.wait_drive();
 
-    chassis.set_swing_pid(ez::LEFT_SWING, 135, SWING_SPEED);
-    chassis.wait_drive();
+	chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
+	chassis.wait_until(-3);
 
-    intake.move(-127);
+	chassis.set_drive_pid(5, DRIVE_SPEED);
+	chassis.wait_drive();
 
-    chassis.set_drive_pid(12, DRIVE_SPEED);
-    chassis.wait_drive();
+	chassis.set_turn_pid(90, TURN_SPEED);
+	chassis.wait_drive();
+
+	intake.move(-120);
+
+	chassis.set_drive_pid(10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(17, DRIVE_SPEED);
+	chassis.wait_drive();
+	intake.brake();
+
+	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.wait_drive();
 }
 
 
@@ -94,22 +125,52 @@ void right_side() {
 // Left Side Auton
 ///
 void left_side() {
-    chassis.set_drive_pid(48, DRIVE_SPEED, true);
-    chassis.wait_drive();
+	default_constants();
+	chassis.set_drive_pid(24, DRIVE_SPEED, true);
+	chassis.wait_drive();
 
-    chassis.set_swing_pid(ez::RIGHT_SWING, 45, SWING_SPEED);
-    chassis.wait_drive();
+	chassis.set_swing_pid(ez::LEFT_SWING, 45, SWING_SPEED);
+	chassis.wait_drive();
 
-    chassis.set_drive_pid(12, DRIVE_SPEED);
-    chassis.wait_drive();
+	chassis.set_drive_pid(12, DRIVE_SPEED, true);
+	chassis.wait_drive();
 
-    chassis.set_swing_pid(ez::LEFT_SWING, -135, SWING_SPEED);
-    chassis.wait_drive();
+	chassis.set_swing_pid(ez::RIGHT_SWING, 0, SWING_SPEED);
+	chassis.wait_until(-3);
 
-    intake.move(-127);
+	chassis.set_drive_pid(5, DRIVE_SPEED);
+	chassis.wait_drive();
 
-    chassis.set_drive_pid(12, DRIVE_SPEED);
-    chassis.wait_drive();
+	chassis.set_turn_pid(-90, TURN_SPEED);
+	chassis.wait_drive();
+
+	intake.move(-120);
+
+	chassis.set_drive_pid(10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(17, DRIVE_SPEED);
+	chassis.wait_drive();
+	intake.brake();
+
+	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_swing_pid(RIGHT_SWING, 0, TURN_SPEED);
+	chassis.wait_drive();
+
+	intake.move(110);
+
+	chassis.set_drive_pid(4, 80);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+
 }
 
 ///
@@ -128,11 +189,29 @@ void drive_example() {
   chassis.set_drive_pid(-12, DRIVE_SPEED);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(-12, DRIVE_SPEED);
+  chassis.set_drive_pid(12, DRIVE_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-24, DRIVE_SPEED);
   chassis.wait_drive();
 }
 
 
+void skills_code() {
+	uint32_t now = pros::millis();
+	chassis.set_drive_pid(20, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(-115, TURN_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(20, DRIVE_SPEED);
+	chassis.wait_drive();
+	while (now < 60000) {
+		flywheelmoveauton(300);
+	}
+	flywheel.brake();
+}
 
 ///
 // Turn Example
@@ -228,25 +307,7 @@ void swing_example() {
 
 
 
-///
-// Auto that tests everything
-///
-void combining_movements() {
-  chassis.set_drive_pid(24, DRIVE_SPEED, true);
-  chassis.wait_drive();
 
-  chassis.set_turn_pid(45, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_swing_pid(ez::RIGHT_SWING, -45, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(0, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(-24, DRIVE_SPEED, true);
-  chassis.wait_drive();
-}
 
 
 
@@ -255,21 +316,21 @@ void combining_movements() {
 ///
 void tug (int attempts) {
   for (int i=0; i<attempts-1; i++) {
-    // Attempt to drive backwards
-    printf("i - %i", i);
-    chassis.set_drive_pid(-12, 127);
-    chassis.wait_drive();
+	// Attempt to drive backwards
+	printf("i - %i", i);
+	chassis.set_drive_pid(-12, 127);
+	chassis.wait_drive();
 
-    // If failsafed...
-    if (chassis.interfered) {
-      chassis.reset_drive_sensor();
-      chassis.set_drive_pid(-2, 20);
-      pros::delay(1000);
-    }
-    // If robot successfully drove back, return
-    else {
-      return;
-    }
+	// If failsafed...
+	if (chassis.interfered) {
+	  chassis.reset_drive_sensor();
+	  chassis.set_drive_pid(-2, 20);
+	  pros::delay(1000);
+	}
+	// If robot successfully drove back, return
+	else {
+	  return;
+	}
   }
 }
 
