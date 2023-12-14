@@ -10,9 +10,10 @@
 
 
 
-static bool is_skills = false;
+bool is_skills = false;
 static void toggle_skills() {
-	is_skills != is_skills;
+	is_skills = !is_skills;
+	pros::lcd::clear_line(4);
 	if (is_skills) {
 		pros::lcd::set_text(4, "Sunai");
 	}
@@ -50,17 +51,18 @@ void initialize() {
   // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
 
-  flywheel.tare_position();
-  flywheel.set_encoder_units(MOTOR_ENCODER_DEGREES);
+ 
+  flywheel.set_encoder_units(MOTOR_ENCODER_ROTATIONS);
+  flywheel.set_brake_mode(MOTOR_BRAKE_COAST);
 
-  chassis.imu_calibrate();
+  chassis.imu_calibrate(true);
 
   pros::lcd::register_btn1_cb(toggle_skills);
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-	Auton("Left side code\nThis code goes forward, does some swerves, and scores a preload LEFT", left_side),
-	Auton("Right side code\nThis code goes forward, does some swerves, and scores a preload on RIGHT", right_side),
+	Auton("Close side code\nThis code goes forward, does some swerves, and scores a preload on CLOSE", close_side),
+	Auton("Far side code\nThis code goes forward, does some swerves, and scores a preload FAR", far_side),
 	Auton("Skills code: goes into position and turns flywheel", skills_code),
 	Auton("Test code__Test code__Test code__Test code", test_code),
 	Auton("Forward and backward", drive_example),

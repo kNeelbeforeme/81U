@@ -4,8 +4,8 @@
 
 extern Drive chassis;
 
-void right_side();
-void left_side();
+void far_side();
+void close_side();
 void skills_code();
 void drive_example();
 void turn_example();
@@ -14,6 +14,7 @@ void wait_until_change_speed();
 void swing_example();
 void test_code();
 void interfered_example();
+void jerk(int attempts);
 
 void default_constants();
 void jerk_constants();

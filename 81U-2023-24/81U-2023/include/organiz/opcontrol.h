@@ -3,4 +3,7 @@
 
 void wings(bool out);
 void flywheelmove();
-void flywheelmoveauton(int speed);
+void flywheelmoveauton(bool on, int speed = 300);
+
+#define OUT true
+#define IN false

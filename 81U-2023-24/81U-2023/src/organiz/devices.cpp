@@ -8,6 +8,7 @@ pros::Motor flywheel (11);
 pros::Motor intake(12);
 pros::ADIDigitalOut right_wing('A', false);
 pros::ADIDigitalOut left_wing('B', false);
+pros::ADIDigitalOut endgame('H', true);
 pros::IMU inertial(20);
 
 // Chassis constructor
