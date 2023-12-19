@@ -64,6 +64,8 @@ void initialize() {
 	Auton("Close side code\nThis code goes forward, does some swerves, and scores a preload on CLOSE", close_side),
 	Auton("Far side code\nThis code goes forward, does some swerves, and scores a preload FAR", far_side),
 	Auton("Skills code: goes into position and turns flywheel", skills_code),
+	Auton("Close side code\n NO BAR_____NO BAR CLOSE_____NO BAR", close_side_nobar),
+	Auton("Far side code\n NO BAR_____NO BAR FARSIDE_____NO BAR", far_side_nobar),
 	Auton("Test code__Test code__Test code__Test code", test_code),
 	Auton("Forward and backward", drive_example),
 	Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
@@ -232,6 +234,10 @@ void opcontrol() {
 		  }
 		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
 			  wings(false);
+		  }
+
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+			  endgame.set_value(true);
 		  }
 
 

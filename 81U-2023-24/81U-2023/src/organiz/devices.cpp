@@ -4,11 +4,11 @@
 
 
 //motor initialization
-pros::Motor flywheel (11);
+pros::Motor flywheel(11);
 pros::Motor intake(12);
-pros::ADIDigitalOut right_wing('A', false);
+pros::ADIDigitalOut right_wing('G', false);
 pros::ADIDigitalOut left_wing('B', false);
-pros::ADIDigitalOut endgame('H', true);
+pros::ADIDigitalOut endgame('H', false);
 pros::IMU inertial(20);
 
 // Chassis constructor

@@ -12,7 +12,7 @@ void wings(bool out) {
 }
 void flywheelmove() {
 	int flywheelsped = flywheel.get_actual_velocity(),
-		targetsped = 300,
+		targetsped = 400,
 		error = 0,
 		gain = 0,
 		setspeed = 0;

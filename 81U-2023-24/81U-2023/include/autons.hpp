@@ -6,6 +6,8 @@ extern Drive chassis;
 
 void far_side();
 void close_side();
+void close_side_nobar();
+void far_side_nobar();
 void skills_code();
 void drive_example();
 void turn_example();

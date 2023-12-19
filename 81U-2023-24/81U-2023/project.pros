@@ -1,7 +1,7 @@
 {
     "py/object": "pros.conductor.project.Project",
     "py/state": {
-        "project_name": "81U-2023-Arjun",
+        "project_name": "81U-2023",
         "target": "v5",
         "templates": {
             "EZ-Template": {
