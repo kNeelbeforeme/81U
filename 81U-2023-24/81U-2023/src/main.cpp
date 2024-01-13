@@ -9,8 +9,12 @@
 
 
 
+//sunai
+//bool is_skills = true;
 
+//arjun
 bool is_skills = false;
+
 static void toggle_skills() {
 	is_skills = !is_skills;
 	pros::lcd::clear_line(4);
@@ -52,8 +56,8 @@ void initialize() {
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
 
  
-  flywheel.set_encoder_units(MOTOR_ENCODER_ROTATIONS);
-  flywheel.set_brake_mode(MOTOR_BRAKE_COAST);
+  //flywheel.set_encoder_units(MOTOR_ENCODER_ROTATIONS);
+  //flywheel.set_brake_mode(MOTOR_BRAKE_COAST);
 
   chassis.imu_calibrate(true);
 
@@ -151,14 +155,15 @@ void autonomous() {
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-  flywheel.set_brake_mode(MOTOR_BRAKE_COAST);
-  bool wings_out = false;
-  wings(wings_out);
+  //flywheel.set_brake_mode(MOTOR_BRAKE_COAST);
+  bool front_wings_out = false;
+  front_wings(front_wings_out);
 
-  pros::Task flywheel_func(flywheelmove, "moves flywheel to initial point when 'L2' is pressed");
+  //pros::Task flywheel_func(flywheelmove, "moves flywheel to initial point when 'L2' is pressed");
 
   if (is_skills) {
 	  //Sunai Driving
+	  chassis.set_drive_brake(MOTOR_BRAKE_BRAKE);
 	  while (true) {
 
 		  //chassis.tank(); // Tank control
@@ -179,27 +184,35 @@ void opcontrol() {
 		  }
 
 		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			  flywheelmove();
+			  kicker.move(100);
 		  }
 		  else {
-			  flywheel.brake();
+			  kicker.brake();
 		  }
 
 
 
 
-		  //if "A" pressed, toggle wings
+		  //if "A" pressed, toggle front_wings
 		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-			  wings(true);
+			  front_wings(true);
 		  } else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-			  wings(false);
+			  front_wings(false);
 		  }
 
+		  //if "Left" pressed, toggle front_wings
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+			  back_wings(true);
+		  }
+		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+			  back_wings(false);
+		  }
 
 		  pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
 	  }
   }  else if (!is_skills) {
 	  //Arjun Driving
+	  chassis.set_drive_brake(MOTOR_BRAKE_COAST);
 	  while (true) {
 
 		  //chassis.tank(); // Tank control
@@ -220,20 +233,28 @@ void opcontrol() {
 		  }
 
 		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			  flywheelmove();
+			  kicker.move(127);
 		  }
 		  else {
-			  flywheel.brake();
+			  kicker.brake();
 		  }
 
 
 
-		  //if "A" pressed, toggle wings
+		  //if "A" pressed, toggle front_wings
 		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-			  wings(true);
+			  front_wings(true);
 		  }
 		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-			  wings(false);
+			  front_wings(false);
+		  }
+
+		  //if "A" pressed, toggle front_wings
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+			  back_wings(true);
+		  }
+		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+			  back_wings(false);
 		  }
 
 		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
