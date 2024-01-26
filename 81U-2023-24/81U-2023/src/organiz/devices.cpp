@@ -4,27 +4,28 @@
 
 
 //motor initialization
-pros::Motor kicker(-15);
-pros::Motor intake(10); //R1 in R2 out
-pros::ADIDigitalOut front_right_wing('G', false);
-pros::ADIDigitalOut front_left_wing('B', false);
-pros::ADIDigitalOut back_left_wing('A', false);
-pros::ADIDigitalOut back_right_wing('C', false);
-pros::ADIDigitalOut endgame('H', false);
-pros::IMU inertial(16);
+pros::Motor kicker(-21);
+pros::Motor flywheel(11);
+pros::Motor intake(6); //R1 in R2 out
+pros::ADIDigitalOut front_wings('H', false);
+pros::ADIDigitalOut back_left_wing('G', false);
+pros::ADIDigitalOut back_right_wing('E', false);
+pros::ADIDigitalOut endgame('F', false);
+pros::Distance kickerdistance('D');
+pros::IMU inertial(19);
 
 // Chassis constructor
 Drive chassis(
 	// Left Chassis Ports (negative port will reverse it!)
 	//   the first port is the sensored/middle port (when trackers are not used!)
-	{ -3, -11, -5}
+	{ -2, -16, -1}
 
 	// Right Chassis Ports (negative port will reverse it!)
 	//   the first port is the sensored/middle port (when trackers are not used!)
-	, { 9, 2, 4}
+	, { 9, 20, 10}
 
 	// IMU Port
-	, 1
+	, 18
 
 	// Wheel Diameter (Remember, 4" wheels are actually 4.125!)pros
 	//    (or tracking wheel diameter)
@@ -38,7 +39,7 @@ Drive chassis(
 	//    (or gear ratio of tracking wheel)
 	// eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
 	// eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
-	, 1.33
+	, 1.3333
 
 	// Uncomment if using tracking wheels
 	/*

@@ -15,7 +15,7 @@
 //arjun
 bool is_skills = false;
 
-static void toggle_skills() {
+void toggle_skills() {
 	is_skills = !is_skills;
 	pros::lcd::clear_line(4);
 	if (is_skills) {
@@ -61,11 +61,11 @@ void initialize() {
 
   chassis.imu_calibrate(true);
 
-  pros::lcd::register_btn1_cb(toggle_skills);
+  pros::lcd::register_btn1_cb(&toggle_skills);
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-	Auton("Close side code\nThis code goes forward, does some swerves, and scores a preload on CLOSE", close_side),
+	Auton("Close side code\n SETUP ALONG MATCHLOAD BAR", close_side),
 	Auton("Far side code\nThis code goes forward, does some swerves, and scores a preload FAR", far_side),
 	Auton("Skills code: goes into position and turns flywheel", skills_code),
 	Auton("Close side code\n NO BAR_____NO BAR CLOSE_____NO BAR", close_side_nobar),
@@ -157,14 +157,16 @@ void opcontrol() {
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
   //flywheel.set_brake_mode(MOTOR_BRAKE_COAST);
   bool front_wings_out = false;
-  front_wings(front_wings_out);
+  front_wings.set_value(front_wings_out);
+
+
 
   //pros::Task flywheel_func(flywheelmove, "moves flywheel to initial point when 'L2' is pressed");
 
   if (is_skills) {
 	  //Sunai Driving
 	  chassis.set_drive_brake(MOTOR_BRAKE_BRAKE);
-	  while (true) {
+	  while (is_skills) {
 
 		  //chassis.tank(); // Tank control
 		  // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
@@ -184,28 +186,40 @@ void opcontrol() {
 		  }
 
 		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			  kicker.move(100);
+			  //kicker.move(127);
+			  flywheelmove();
 		  }
 		  else {
-			  kicker.brake();
+			  //kicker.brake();
+			  flywheel.brake();
 		  }
 
-
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+			  is_skills != is_skills;
+		  }
 
 
 		  //if "A" pressed, toggle front_wings
 		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-			  front_wings(true);
+			  front_wings.set_value(true);
 		  } else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-			  front_wings(false);
+			  front_wings.set_value(false);
 		  }
 
 		  //if "Left" pressed, toggle front_wings
-		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
 			  back_wings(true);
 		  }
-		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
 			  back_wings(false);
+		  }
+
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+			  endgame.set_value(true);
+		  }
+
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+			  is_skills != is_skills;
 		  }
 
 		  pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
@@ -213,7 +227,7 @@ void opcontrol() {
   }  else if (!is_skills) {
 	  //Arjun Driving
 	  chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-	  while (true) {
+	  while (!is_skills) {
 
 		  //chassis.tank(); // Tank control
 		  chassis.arcade_standard(ez::SPLIT); // Standard split arcade
@@ -232,33 +246,43 @@ void opcontrol() {
 			  intake.brake();
 		  }
 
-		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			  kicker.move(127);
+		  if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+			  //kicker.move(127);
+			  flywheelmove();
+
+		  } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
+			  //kicker.move(127);
+			  flywheelmove(-1);
 		  }
 		  else {
-			  kicker.brake();
+			  flywheel.brake();
+			  //kicker.brake();
 		  }
 
 
 
 		  //if "A" pressed, toggle front_wings
-		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-			  front_wings(true);
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+			  front_wings.set_value(true);
 		  }
-		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-			  front_wings(false);
+		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+			  front_wings.set_value(false);
 		  }
 
 		  //if "A" pressed, toggle front_wings
-		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
 			  back_wings(true);
 		  }
-		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+		  else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
 			  back_wings(false);
 		  }
 
 		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
 			  endgame.set_value(true);
+		  }
+
+		  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+			  is_skills != is_skills;
 		  }
 
 

@@ -25,13 +25,15 @@ const int SWING_SPEED = 90;
 // If the objects are light or the cog doesn't change much, then there isn't a concern here.
 
 void default_constants() {
+  
   chassis.set_slew_min_power(80, 80);
-  chassis.set_slew_distance(5, 5);
-  chassis.set_pid_constants(&chassis.headingPID, 0.5, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.6, 0, 3, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.6, 0, 3, 0);
-  chassis.set_pid_constants(&chassis.turnPID, 1, 0.0025, 38, 15);
+  chassis.set_slew_distance(7, 7);
+  chassis.set_pid_constants(&chassis.headingPID, 5, 0.003, 35, 15);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.5, 0.01, 1, 10);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.5, 0.01, 1, 10);
+  chassis.set_pid_constants(&chassis.turnPID, 4, 0.003, 30, 12);
   chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
+  
 }
 
 void jerk_constants() {
@@ -55,8 +57,8 @@ void two_mogo_constants() {
 }
 
 void exit_condition_defaults() {
-  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
+  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 6, 500, 500);
+  chassis.set_exit_condition(chassis.swing_exit, 100, 2, 500, 6, 500, 500);
   chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
 }
 
@@ -71,12 +73,11 @@ void modified_exit_condition() {
 ///
 void test_code() {
 
-
-	chassis.set_drive_pid(12, DRIVE_SPEED, true);
+	chassis.set_drive_pid(48, DRIVE_SPEED, true);
 	chassis.wait_drive();
 
-	chassis.set_drive_pid(-12, DRIVE_SPEED, true);
-
+	chassis.set_drive_pid(-48, DRIVE_SPEED, true);
+	chassis.wait_drive();
 }
 
 ///
@@ -84,32 +85,54 @@ void test_code() {
 ///
 void close_side() {
 	default_constants();
-	chassis.set_angle(90);
 
-	chassis.set_drive_pid(30, DRIVE_SPEED, true);
+	chassis.set_angle(135);
+
+	//starts along bar
+
+	back_right_wing.set_value(OUT);
+	pros::delay(500);
+
+	chassis.set_turn_pid(0, TURN_SPEED);
+	chassis.wait_until(90);
+
+	back_right_wing.set_value(IN);
 	chassis.wait_drive();
 
-	intake.move(127);
+	chassis.set_swing_pid(RIGHT_SWING, -45, SWING_SPEED);
+	chassis.wait_drive();
 
-	chassis.set_drive_pid(-30, DRIVE_SPEED, true);
+	chassis.set_drive_pid(10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(0, TURN_SPEED);
+	chassis.wait_drive();
+
+	//into the goal
+	intake.move(-127);
+	chassis.set_drive_pid(15, DRIVE_SPEED);
 	chassis.wait_drive();
 	intake.brake();
+
+	chassis.set_drive_pid(-15, DRIVE_SPEED);
+	chassis.wait_drive();
 
 	chassis.set_turn_pid(135, TURN_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_drive_pid(-24, DRIVE_SPEED);
+	chassis.set_drive_pid(25, DRIVE_SPEED);
 	chassis.wait_drive();
 
+	chassis.set_turn_pid(90, TURN_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(30, DRIVE_SPEED);
+	chassis.wait_drive();
+	
 }
 
-///
-// Close Side No Bar only triballs (leftside)
-///
 void close_side_nobar() {
-	default_constants();
 
-	
 }
 
 ///
@@ -118,11 +141,121 @@ void close_side_nobar() {
 void far_side() {
 	default_constants();
 
+
+	//start against wall 
+	chassis.set_angle(0);
+
+	chassis.set_swing_pid(LEFT_SWING, 45, SWING_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(25, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_swing_pid(RIGHT_SWING, 0, SWING_SPEED);
+	chassis.wait_drive();
+
+	intake.move(-127);
+	chassis.set_drive_pid(10, DRIVE_SPEED);
+	chassis.wait_drive();
+	intake.brake();
+
+	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(-140, TURN_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(22, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_swing_pid(LEFT_SWING, -90, SWING_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(30, DRIVE_SPEED);
+	chassis.wait_drive();
 }
 
 void far_side_nobar() {
 	default_constants();
 
+	//start against wall 
+	chassis.set_angle(0);
+
+	chassis.set_swing_pid(LEFT_SWING, 45, SWING_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(25, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_swing_pid(RIGHT_SWING, 0, SWING_SPEED);
+	chassis.wait_drive();
+
+	intake.move(-127);
+	chassis.set_drive_pid(10, DRIVE_SPEED);
+	chassis.wait_drive();
+	intake.brake();
+
+	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(-80, TURN_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(40, DRIVE_SPEED);
+	intake.move(100);
+	chassis.wait_until(37);
+
+	chassis.set_swing_pid(LEFT_SWING, -60, SWING_SPEED);
+	chassis.wait_until(-61);
+
+	chassis.set_drive_pid(8, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(50, TURN_SPEED);
+	chassis.wait_until(20);
+	//first field ball out
+	intake.move(-127);
+	chassis.wait_drive();
+
+	intake.brake();
+
+	chassis.set_turn_pid(0, TURN_SPEED);
+	chassis.wait_until(1);
+
+	chassis.set_drive_pid(15, DRIVE_SPEED);
+	intake.move(100);
+	chassis.wait_drive();
+
+	chassis.set_swing_pid(RIGHT_SWING, -90, SWING_SPEED);
+	chassis.wait_until(-89);
+
+	chassis.set_turn_pid(90, TURN_SPEED);
+	chassis.wait_drive();
+
+	//second ball and finisher
+	intake.move(-100);
+	front_wings.set_value(OUT);
+
+	chassis.set_drive_pid(30, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	intake.brake();
+	front_wings.set_value(IN);
+
+	//now to the bar
+	chassis.set_drive_pid(-30, DRIVE_SPEED);
+	chassis.wait_until(-19);
+
+	chassis.set_swing_pid(LEFT_SWING, 0, SWING_SPEED);
+	chassis.wait_until(1);
+
+	chassis.set_drive_pid(-30, DRIVE_SPEED + 10);
+	chassis.wait_drive();
+
+	back_left_wing.set_value(OUT);
+
+	chassis.set_swing_pid(LEFT_SWING, -10, SWING_SPEED);
+	chassis.wait_drive();
 }
 
 
@@ -152,88 +285,90 @@ void drive_example() {
 
 
 void skills_code() {
+
+	default_constants();
+
+	chassis.set_angle(0);
+
 	//drive forward and set up in match load area
-	chassis.set_drive_pid(10, DRIVE_SPEED);
+	chassis.set_drive_pid(20, DRIVE_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_swing_pid(RIGHT_SWING, -115, TURN_SPEED);
+	chassis.set_turn_pid(-115, TURN_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_drive_pid(7, DRIVE_SPEED);
+	chassis.set_drive_pid(19, DRIVE_SPEED - 10);
 	chassis.wait_drive();
 
-	//flywheel.move_velocity(300);
-	//pros::delay(35000);
+	flywheel.move_velocity(500);
+	pros::delay(40000);
 	//match loads done
 
-	chassis.set_drive_pid(-10, DRIVE_SPEED);
+	chassis.set_drive_pid(-5, DRIVE_SPEED);
 	chassis.wait_drive();
 
-	//flywheel.brake();
+	flywheel.brake();
 
-	chassis.set_turn_pid(0, TURN_SPEED);
+	chassis.set_swing_pid(RIGHT_SWING, 0, SWING_SPEED);
 	chassis.wait_until(1);
 
 	chassis.set_drive_pid(-10, DRIVE_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_swing_pid(RIGHT_SWING, 90, SWING_SPEED);
-	chassis.wait_until(89);
+	chassis.set_turn_pid(-90, TURN_SPEED);
+	chassis.wait_drive();
 
-	chassis.set_drive_pid(90, DRIVE_SPEED, true);
-	chassis.wait_until(89);
+	//now going under barrier
 
-	chassis.set_turn_pid(0, TURN_SPEED);
+	chassis.set_drive_pid(-64, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(-135, TURN_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_drive_pid(-30, DRIVE_SPEED);
+	chassis.wait_drive();
+
+	chassis.set_turn_pid(-180, SWING_SPEED);
+	chassis.wait_drive();
+
+	//first push
+
+	chassis.set_drive_pid(-12, DRIVE_SPEED);
 	chassis.wait_drive();
 
 	chassis.set_drive_pid(10, DRIVE_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_swing_pid(RIGHT_SWING, -50, SWING_SPEED);
-	chassis.wait_until(-44);
-
-	chassis.set_drive_pid(24, DRIVE_SPEED);
+	chassis.set_turn_pid(-80, SWING_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_swing_pid(LEFT_SWING, 0, SWING_SPEED);
+	chassis.set_drive_pid(36, DRIVE_SPEED, true);
+	chassis.wait_drive();
+	
+	chassis.set_turn_pid(0, SWING_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_drive_pid(7, DRIVE_SPEED + 10);
+	chassis.set_drive_pid(24, DRIVE_SPEED, true);
 	chassis.wait_drive();
 
 	chassis.set_swing_pid(LEFT_SWING, 90, SWING_SPEED);
 	chassis.wait_drive();
 
-	front_wings(OUT);
+	//second push
 
-	chassis.set_drive_pid(10, DRIVE_SPEED);
+	front_wings.set_value(OUT);
+
+	intake.move(-127);
+
+	chassis.set_drive_pid(30, DRIVE_SPEED);
 	chassis.wait_drive();
 
-	chassis.set_drive_pid(-24, DRIVE_SPEED);
-	chassis.wait_drive();
-
-	front_wings(IN);
-
-	chassis.set_swing_pid(RIGHT_SWING, 180, SWING_SPEED);
-	chassis.wait_drive();
-
-	chassis.set_drive_pid(-15, DRIVE_SPEED);
-	chassis.wait_drive();
-
-	chassis.set_swing_pid(LEFT_SWING, 135, SWING_SPEED);
-	chassis.wait_drive();
-
-	front_wings(OUT);
-
-	chassis.set_drive_pid(15, DRIVE_SPEED);
-	chassis.wait_drive();
-
-	front_wings(IN);
+	intake.brake();
 
 	chassis.set_drive_pid(-10, DRIVE_SPEED);
-	chassis.wait_drive();
-
-
+	front_wings.set_value(IN);
+	chassis.wait_drive();	
 }
 
 ///
